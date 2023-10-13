@@ -361,7 +361,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -372,8 +372,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -386,9 +386,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>anthracycline/</code> <span
@@ -411,18 +411,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -513,13 +516,13 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongd0a998d">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong8bbf76c">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> d0a998d
+aria-hidden="true"></span> <strong>Repository version:</strong> 8bbf76c
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongd0a998d"
+<div id="strongRepositoryversionstrong8bbf76c"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -528,7 +531,7 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version d0a998d.
+The results in this page were generated with repository version 8bbf76c.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -550,6 +553,9 @@ Ignored files:
 Untracked files:
     Untracked:  .DS_Store
     Untracked:  data/Statistical Analysis.csv
+
+Unstaged changes:
+    Modified:   analysis/multivariate.Rmd
 
 </code></pre>
 <p>
@@ -597,6 +603,23 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
@@ -619,6 +642,9 @@ workflowr::wflow_publish("analysis/multivariate.Rmd")
 </div>
 </div>
 </div>
+<pre><code>#output: workflowr::wflow_html
+#editor_options:
+#  chunk_output_type: console</code></pre>
 <div id="setup" class="section level2">
 <h2>Setup</h2>
 <pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
@@ -795,6 +821,43 @@ dset_vars %&gt;%
   ggplot() +
     geom_bar(mapping = aes(x = age))</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># roughly parametric, long left tail
 
 # sex
@@ -802,6 +865,43 @@ dset_vars %&gt;%
   ggplot() +
     geom_bar(mapping = aes(x = sex))</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-2">
+Past versions of unnamed-chunk-4-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># roughly even
 
 # GFR
@@ -809,6 +909,43 @@ dset_vars %&gt;%
   ggplot() +
     geom_bar(mapping = aes(x = gfr))</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-3">
+Past versions of unnamed-chunk-4-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># roughly parametric
 
 # obesity
@@ -816,6 +953,43 @@ dset_vars %&gt;%
   ggplot() +
     geom_bar(mapping = aes(x = bmi))</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-4">
+Past versions of unnamed-chunk-4-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># roughly parametric, long right tail, two outliers on right
 
 # disease
@@ -823,6 +997,43 @@ dset_vars %&gt;%
   ggplot() +
     geom_bar(mapping = aes(x = disease))</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-5">
+Past versions of unnamed-chunk-4-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># most are DLBCL, could do DLBCL vs all else or Hodgkin vs non-Hodgkin
 
 # protein 1
@@ -831,6 +1042,43 @@ dset_vars %&gt;%
     geom_histogram(mapping = aes(x = serpina12))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-6">
+Past versions of unnamed-chunk-4-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># two outliers to the right
 
 # protein 2
@@ -839,6 +1087,43 @@ dset_vars %&gt;%
     geom_histogram(mapping = aes(x = cpvl))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-7.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-7">
+Past versions of unnamed-chunk-4-7.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># two outliers to the right, long tail to right
 
 # protein 3
@@ -847,6 +1132,43 @@ dset_vars %&gt;%
     geom_histogram(mapping = aes(x = pigr))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-8">
+Past versions of unnamed-chunk-4-8.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># parametric distribution
 
 # protein 4
@@ -855,6 +1177,43 @@ dset_vars %&gt;%
     geom_histogram(mapping = aes(x = iqfc3))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-9.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-9">
+Past versions of unnamed-chunk-4-9.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># outlier to the right
 
 # protein 5
@@ -863,6 +1222,43 @@ dset_vars %&gt;%
     geom_histogram(mapping = aes(x = sesq2))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/multivariate.Rmd/unnamed-chunk-4-10.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-10">
+Past versions of unnamed-chunk-4-10.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-10" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># long tail to right</code></pre>
 </div>
 <div id="plot-outcome-variables" class="section level4">
@@ -933,9 +1329,46 @@ sesq2 &lt;- dset_vars %&gt;%
 ggarrange(serpina12, cpvl, iqfc3, pigr, sesq2,
                     labels = c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;),
                     ncol = 3, nrow = 2)</code></pre>
-<p><img src="figure/multivariate.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
-None of the pretreatment protein levels varied significantly between the
-cardiotox and no cardiotox categorial outcome variables.</p>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>None of the pretreatment protein levels varied significantly between
+the cardiotox and no cardiotox categorial outcome variables.</p>
 <p>Delta LVEF Scatter plots</p>
 <pre class="r"><code>s12_scat &lt;- dset_vars %&gt;%
   filter(!is.na(delta_lvef)) %&gt;%
@@ -975,8 +1408,45 @@ ggarrange(s12_scat, cpvl_scat, iqfc3_scat, pigr_scat, sesq2_scat,
 `geom_smooth()` using formula = &#39;y ~ x&#39;
 `geom_smooth()` using formula = &#39;y ~ x&#39;
 `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="figure/multivariate.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" />
-P-values were not computed for these relationships as the
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>P-values were not computed for these relationships as the
 Bonferroni-corrected P-values from the initial high dimensional
 univariate correlation test should be used here. All demonstrated a
 linear trend, though the impact of outliers is a little concerning for
@@ -1022,8 +1492,45 @@ ggarrange(s12_scat_g, cpvl_scat_g, iqfc3_scat_g, pigr_scat_g, sesq2_scat_g,
 `geom_smooth()` using formula = &#39;y ~ x&#39;
 `geom_smooth()` using formula = &#39;y ~ x&#39;
 `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="figure/multivariate.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" />
-P-values were not computed for these relationships as the
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+8bbf76c
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>P-values were not computed for these relationships as the
 Bonferroni-corrected P-values from the initial high dimensional
 univariate correlation test should be used here. All demonstrated a
 linear trend, though the impact of outliers is a little concerning for
@@ -1303,8 +1810,9 @@ right now for train/test splitting</p>
 </div>
 <div id="stratify-on-obesity" class="section level2">
 <h2>Stratify on obesity</h2>
-<p><a href="https://www.tidymodels.org/learn/statistics/tidy-analysis/"
-class="uri">https://www.tidymodels.org/learn/statistics/tidy-analysis/</a></p>
+<p><a href="https://www.tidymodels.org/learn/statistics/tidy-analysis"
+class="uri">https://www.tidymodels.org/learn/statistics/tidy-analysis</a></p>
+<p>Too few cases right now for stratification</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1335,27 +1843,25 @@ other attached packages:
  [1] broom_1.0.5     ggpubr_0.6.0    lubridate_1.9.3 forcats_1.0.0  
  [5] stringr_1.5.0   dplyr_1.1.3     purrr_1.0.2     readr_2.1.4    
  [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.4   tidyverse_2.0.0
-[13] workflowr_1.7.1
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.4      xfun_0.40         bslib_0.5.1       processx_3.8.2   
- [5] rstatix_0.7.2     lattice_0.21-8    callr_3.7.3       tzdb_0.4.0       
- [9] vctrs_0.6.3       tools_4.3.1       ps_1.7.5          generics_0.1.3   
-[13] parallel_4.3.1    fansi_1.0.5       pkgconfig_2.0.3   Matrix_1.6-1.1   
-[17] lifecycle_1.0.3   farver_2.1.1      compiler_4.3.1    git2r_0.32.0     
-[21] munsell_0.5.0     getPass_0.2-2     carData_3.0-5     httpuv_1.6.11    
-[25] htmltools_0.5.6.1 sass_0.4.7        yaml_2.3.7        crayon_1.5.2     
-[29] later_1.3.1       pillar_1.9.0      car_3.1-2         jquerylib_0.1.4  
-[33] whisker_0.4.1     cachem_1.0.8      abind_1.4-5       nlme_3.1-162     
-[37] tidyselect_1.2.0  digest_0.6.33     stringi_1.7.12    splines_4.3.1    
-[41] labeling_0.4.3    cowplot_1.1.1     rprojroot_2.0.3   fastmap_1.1.1    
-[45] grid_4.3.1        colorspace_2.1-0  cli_3.6.1         magrittr_2.0.3   
-[49] utf8_1.2.3        withr_2.5.1       scales_1.2.1      promises_1.2.1   
-[53] backports_1.4.1   bit64_4.0.5       timechange_0.2.0  rmarkdown_2.25   
-[57] httr_1.4.7        bit_4.0.5         ggsignif_0.6.4    hms_1.1.3        
-[61] evaluate_0.22     knitr_1.44        mgcv_1.8-42       rlang_1.1.1      
-[65] Rcpp_1.0.11       glue_1.6.2        rstudioapi_0.15.0 vroom_1.6.4      
-[69] jsonlite_1.8.7    R6_2.5.1          fs_1.6.3         </code></pre>
+ [1] gtable_0.3.4      xfun_0.40         bslib_0.5.1       rstatix_0.7.2    
+ [5] lattice_0.21-8    tzdb_0.4.0        vctrs_0.6.3       tools_4.3.1      
+ [9] generics_0.1.3    parallel_4.3.1    fansi_1.0.5       pkgconfig_2.0.3  
+[13] Matrix_1.6-1.1    lifecycle_1.0.3   farver_2.1.1      compiler_4.3.1   
+[17] git2r_0.32.0      munsell_0.5.0     carData_3.0-5     httpuv_1.6.11    
+[21] htmltools_0.5.6.1 sass_0.4.7        yaml_2.3.7        later_1.3.1      
+[25] pillar_1.9.0      car_3.1-2         crayon_1.5.2      jquerylib_0.1.4  
+[29] whisker_0.4.1     cachem_1.0.8      abind_1.4-5       nlme_3.1-162     
+[33] tidyselect_1.2.0  digest_0.6.33     stringi_1.7.12    splines_4.3.1    
+[37] labeling_0.4.3    cowplot_1.1.1     rprojroot_2.0.3   fastmap_1.1.1    
+[41] grid_4.3.1        colorspace_2.1-0  cli_3.6.1         magrittr_2.0.3   
+[45] utf8_1.2.3        withr_2.5.1       scales_1.2.1      promises_1.2.1   
+[49] backports_1.4.1   bit64_4.0.5       timechange_0.2.0  rmarkdown_2.25   
+[53] bit_4.0.5         ggsignif_0.6.4    workflowr_1.7.1   hms_1.1.3        
+[57] evaluate_0.22     knitr_1.44        mgcv_1.8-42       rlang_1.1.1      
+[61] Rcpp_1.0.11       glue_1.6.2        rstudioapi_0.15.0 vroom_1.6.4      
+[65] jsonlite_1.8.7    R6_2.5.1          fs_1.6.3         </code></pre>
 </div>
 </div>
 
