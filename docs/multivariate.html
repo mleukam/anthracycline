@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Michael Leukam" />
+
+<meta name="date" content="2023-10-12" />
+
+<title>Multivariate_Analysis</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">anthracycline</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Multivariate_Analysis</h1>
+<h4 class="author">Michael Leukam</h4>
+<h4 class="date">2023-10-12</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2023-10-13
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>anthracycline/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20231012code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20231012)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20231012code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20231012)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongd0a998d">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> d0a998d
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongd0a998d"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version d0a998d.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .RData
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  .DS_Store
+    Untracked:  data/Statistical Analysis.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/multivariate.Rmd</code>) and HTML
+(<code>docs/multivariate.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+d0a998d
+</td>
+<td>
+Michael Leukam
+</td>
+<td>
+2023-10-13
+</td>
+<td>
+workflowr::wflow_publish("analysis/multivariate.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.3     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(&quot;ggpubr&quot;)
+library(&quot;broom&quot;)
+library(&quot;purrr&quot;)</code></pre>
+<p>Load data</p>
+<pre class="r"><code>dset &lt;- read_csv(&quot;data/Statistical Analysis.csv&quot;)</code></pre>
+<pre><code>Rows: 33 Columns: 40
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr  (7): MRN, Gender, Race, Diagnosis, Asymptomatic CTRCD, Developed Cardio...
+dbl (33): Number, Patient ID, Age, PreLVEF, PreGLS, PosLVEF, PosGLS, Relativ...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div id="data-cleaning" class="section level2">
+<h2>Data Cleaning</h2>
+<p>Dataset includes 5 proteins that survived Bonferroni correction.
+Outcome variables are relative delta LVEF and relative delta GLS, as
+well as “developed cardiotoxicity”. Predictor variables are the baseline
+values of the 5 proteins.</p>
+<ul>
+<li>Renal toxicity: use GFR as continuous variable (maybe try
+cutoff?)</li>
+<li>Obesity: use BMI as continuous variable (maybe try cutoff?)</li>
+<li>Sex: factor</li>
+<li>Age: continuous variable (integer)</li>
+<li>Race: factor</li>
+<li>Diagnosis: factor, DLBCL vs other or cHL vs DLBCL?</li>
+</ul>
+<pre class="r"><code># remove PHI
+dset %&gt;% colnames() %&gt;% print()</code></pre>
+<pre><code> [1] &quot;Number&quot;                         &quot;MRN&quot;                           
+ [3] &quot;Patient ID&quot;                     &quot;Age&quot;                           
+ [5] &quot;Gender&quot;                         &quot;Race&quot;                          
+ [7] &quot;Diagnosis&quot;                      &quot;PreLVEF&quot;                       
+ [9] &quot;PreGLS&quot;                         &quot;PosLVEF&quot;                       
+[11] &quot;PosGLS&quot;                         &quot;Relative Delta GLS&quot;            
+[13] &quot;Relative Delta LVEF&quot;            &quot;Asymptomatic CTRCD&quot;            
+[15] &quot;Developed Cardiotoxicity&quot;       &quot;Treatment Start Date&quot;          
+[17] &quot;Creatinine (mg/dL)&quot;             &quot;BUN&quot;                           
+[19] &quot;eGFR (CKD-EPI) (mL/min/1.73m2)&quot; &quot;Height (in)&quot;                   
+[21] &quot;Height (cm)&quot;                    &quot;Height (m)&quot;                    
+[23] &quot;Weight (lbs)&quot;                   &quot;Weight (Kg)&quot;                   
+[25] &quot;BMI&quot;                            &quot;SERPINA12 Baseline&quot;            
+[27] &quot;SERPINA12 3-Months&quot;             &quot;SERPINA12 Relative Change&quot;     
+[29] &quot;CPVL Baseline&quot;                  &quot;CPVL 3-Months&quot;                 
+[31] &quot;CPVL Relative Change&quot;           &quot;PIGR Baseline&quot;                 
+[33] &quot;PIGR 3-Months&quot;                  &quot;PIGR Relative Change&quot;          
+[35] &quot;IQFC3 Baseline&quot;                 &quot;IQFC3 3-Months&quot;                
+[37] &quot;IQFC3 Relative Change&quot;          &quot;SESQ2 Baseline&quot;                
+[39] &quot;SESQ2 3-Months&quot;                 &quot;SESQ2 Relative Change&quot;         </code></pre>
+<pre class="r"><code>dset_clean &lt;- dset %&gt;% 
+  select(-MRN) %&gt;%
+  select(-`Treatment Start Date`)
+dset_clean %&gt;% colnames() %&gt;% print()</code></pre>
+<pre><code> [1] &quot;Number&quot;                         &quot;Patient ID&quot;                    
+ [3] &quot;Age&quot;                            &quot;Gender&quot;                        
+ [5] &quot;Race&quot;                           &quot;Diagnosis&quot;                     
+ [7] &quot;PreLVEF&quot;                        &quot;PreGLS&quot;                        
+ [9] &quot;PosLVEF&quot;                        &quot;PosGLS&quot;                        
+[11] &quot;Relative Delta GLS&quot;             &quot;Relative Delta LVEF&quot;           
+[13] &quot;Asymptomatic CTRCD&quot;             &quot;Developed Cardiotoxicity&quot;      
+[15] &quot;Creatinine (mg/dL)&quot;             &quot;BUN&quot;                           
+[17] &quot;eGFR (CKD-EPI) (mL/min/1.73m2)&quot; &quot;Height (in)&quot;                   
+[19] &quot;Height (cm)&quot;                    &quot;Height (m)&quot;                    
+[21] &quot;Weight (lbs)&quot;                   &quot;Weight (Kg)&quot;                   
+[23] &quot;BMI&quot;                            &quot;SERPINA12 Baseline&quot;            
+[25] &quot;SERPINA12 3-Months&quot;             &quot;SERPINA12 Relative Change&quot;     
+[27] &quot;CPVL Baseline&quot;                  &quot;CPVL 3-Months&quot;                 
+[29] &quot;CPVL Relative Change&quot;           &quot;PIGR Baseline&quot;                 
+[31] &quot;PIGR 3-Months&quot;                  &quot;PIGR Relative Change&quot;          
+[33] &quot;IQFC3 Baseline&quot;                 &quot;IQFC3 3-Months&quot;                
+[35] &quot;IQFC3 Relative Change&quot;          &quot;SESQ2 Baseline&quot;                
+[37] &quot;SESQ2 3-Months&quot;                 &quot;SESQ2 Relative Change&quot;         </code></pre>
+<pre class="r"><code># make table of response and predictor variables
+# assign correct data types (factors)
+dset_vars &lt;- dset_clean %&gt;%
+  select(&quot;study_id&quot; = `Patient ID`,
+         &quot;age&quot; = &quot;Age&quot;,
+         &quot;sex&quot; = &quot;Gender&quot;,
+         &quot;race&quot; = &quot;Race&quot;,
+         &quot;disease&quot; = &quot;Diagnosis&quot;,
+         &quot;gfr&quot; = `eGFR (CKD-EPI) (mL/min/1.73m2)`,
+         &quot;bmi&quot; = &quot;BMI&quot;,
+         &quot;cardiotox&quot; = `Developed Cardiotoxicity`,
+         &quot;delta_gls&quot; = `Relative Delta GLS`,
+         &quot;delta_lvef&quot; = `Relative Delta LVEF`,
+         &quot;serpina12&quot; = `SERPINA12 Baseline`,
+         &quot;cpvl&quot; = `CPVL Baseline`,
+         &quot;pigr&quot; = `PIGR Baseline`,
+         &quot;iqfc3&quot; = `IQFC3 Baseline`,
+         &quot;sesq2&quot; = `SESQ2 Baseline`
+  ) %&gt;%
+  # fix missing data notation
+  mutate(cardiotox = replace(cardiotox, cardiotox == &quot;N/A&quot;, NA)) %&gt;%
+  # convert categorical variables to factors
+  mutate_at(c(&quot;sex&quot;, &quot;cardiotox&quot;, &quot;race&quot;, &quot;disease&quot;), as.factor) %&gt;%
+  # create cutoff categorial variables
+  mutate(abn_gfr = ifelse(gfr &lt; 90, &quot;abnormal&quot;, &quot;normal&quot;)) %&gt;%
+  mutate(abn_bmi = ifelse(bmi &gt; 29.9, &quot;obese&quot;, &quot;not_obese&quot;)) %&gt;%
+  # fix problematic categories (too small groups)
+  mutate(race_category = ifelse(race == &quot;White&quot;, &quot;white&quot;, &quot;other&quot;)) %&gt;%
+  mutate(disease_category = ifelse(disease == &quot;DLBCL&quot;, &quot;DLBCL&quot;, &quot;other&quot;)) %&gt;%
+  mutate_at(c(&quot;race_category&quot;, &quot;disease_category&quot;, &quot;abn_gfr&quot;, &quot;abn_bmi&quot;), as.factor)
+
+# potential problematic variable -- race
+# most are white, some categories only have 1 person
+summary(dset_vars$race)</code></pre>
+<pre><code>  African American              Asian Declined to Answer           Hispanic 
+                 6                  1                  1                  2 
+             White 
+                23 </code></pre>
+<pre class="r"><code># could consider white vs all else, or exclude
+summary(dset_vars$race_category)</code></pre>
+<pre><code>other white 
+   10    23 </code></pre>
+<pre class="r"><code># potential problematic variable -- disease
+summary(dset_vars$disease)</code></pre>
+<pre><code>                         AML                        DLBCL 
+                           1                           21 
+  Double Hit B-Cell Lymphoma          Follicular Lymphoma 
+                           1                            2 
+  High Grade B-Cell Lymphoma           Hodgkin&#39;s Lymphoma 
+                           1                            5 
+      Non-Hodgkin&#39;s Lymphoma T-Cell, Histiocyte Rich LBCL 
+                           1                            1 </code></pre>
+<pre class="r"><code># probably just exclude for now until there are enough data points for meaningful groupings
+summary(dset_vars$disease_category)</code></pre>
+<pre><code>DLBCL other 
+   21    12 </code></pre>
+<pre class="r"><code>glimpse(dset_vars)</code></pre>
+<pre><code>Rows: 33
+Columns: 19
+$ study_id         &lt;dbl&gt; 5, 6, 8, 14, 23, 24, 25, 30, 32, 34, 35, 36, 37, 41, …
+$ age              &lt;dbl&gt; 24, 70, 44, 49, 57, 61, 69, 61, 29, 27, 68, 60, 81, 7…
+$ sex              &lt;fct&gt; Female, Male, Female, Female, Male, Female, Female, F…
+$ race             &lt;fct&gt; White, African American, African American, White, Asi…
+$ disease          &lt;fct&gt; &quot;Non-Hodgkin&#39;s Lymphoma&quot;, &quot;Follicular Lymphoma&quot;, &quot;T-C…
+$ gfr              &lt;dbl&gt; 124, 65, 93, 110, 103, 73, 94, 102, 123, 121, 102, 11…
+$ bmi              &lt;dbl&gt; 19.9, 24.0, 34.5, 23.6, 23.8, 19.2, 30.2, 29.1, 28.7,…
+$ cardiotox        &lt;fct&gt; 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0,…
+$ delta_gls        &lt;dbl&gt; 0.10, -0.18, -0.74, -0.28, -0.08, -0.03, -0.16, -0.11…
+$ delta_lvef       &lt;dbl&gt; 0.06, -0.23, -0.67, -0.20, -0.07, -0.05, -0.06, -0.14…
+$ serpina12        &lt;dbl&gt; 10.95099, 11.24573, 16.46818, 11.48794, 11.49590, 11.…
+$ cpvl             &lt;dbl&gt; 9.985415, 10.015415, 15.212774, 9.991380, 9.945444, 9…
+$ pigr             &lt;dbl&gt; 11.05630, 11.01555, 13.39428, 11.69831, 10.65750, 10.…
+$ iqfc3            &lt;dbl&gt; 9.989111, 10.227736, 11.613513, 10.308453, 10.188960,…
+$ sesq2            &lt;dbl&gt; 9.183139, 9.222070, 10.807677, 9.212132, 9.224002, 9.…
+$ abn_gfr          &lt;fct&gt; normal, abnormal, normal, normal, normal, abnormal, n…
+$ abn_bmi          &lt;fct&gt; not_obese, not_obese, obese, not_obese, not_obese, no…
+$ race_category    &lt;fct&gt; white, other, other, white, other, white, white, whit…
+$ disease_category &lt;fct&gt; other, other, other, other, DLBCL, DLBCL, other, DLBC…</code></pre>
+</div>
+<div id="exploratory-data-analysis" class="section level2">
+<h2>Exploratory Data Analysis</h2>
+<div id="visualize-distributions" class="section level4">
+<h4>Visualize distributions</h4>
+<p>look for significant ouliers or non parametric distribution</p>
+<pre class="r"><code># age
+dset_vars %&gt;%
+  ggplot() +
+    geom_bar(mapping = aes(x = age))</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># roughly parametric, long left tail
+
+# sex
+dset_vars %&gt;%
+  ggplot() +
+    geom_bar(mapping = aes(x = sex))</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># roughly even
+
+# GFR
+dset_vars %&gt;%
+  ggplot() +
+    geom_bar(mapping = aes(x = gfr))</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># roughly parametric
+
+# obesity
+dset_vars %&gt;%
+  ggplot() +
+    geom_bar(mapping = aes(x = bmi))</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># roughly parametric, long right tail, two outliers on right
+
+# disease
+dset_vars %&gt;%
+  ggplot() +
+    geom_bar(mapping = aes(x = disease))</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-5.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># most are DLBCL, could do DLBCL vs all else or Hodgkin vs non-Hodgkin
+
+# protein 1
+dset_vars %&gt;%
+  ggplot() +
+    geom_histogram(mapping = aes(x = serpina12))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-6.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># two outliers to the right
+
+# protein 2
+dset_vars %&gt;%
+  ggplot() +
+    geom_histogram(mapping = aes(x = cpvl))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-7.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># two outliers to the right, long tail to right
+
+# protein 3
+dset_vars %&gt;%
+  ggplot() +
+    geom_histogram(mapping = aes(x = pigr))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-8.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># parametric distribution
+
+# protein 4
+dset_vars %&gt;%
+  ggplot() +
+    geom_histogram(mapping = aes(x = iqfc3))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-9.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># outlier to the right
+
+# protein 5
+dset_vars %&gt;%
+  ggplot() +
+    geom_histogram(mapping = aes(x = sesq2))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-4-10.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># long tail to right</code></pre>
+</div>
+<div id="plot-outcome-variables" class="section level4">
+<h4>Plot outcome variables</h4>
+<p>Cardiotoxicity - factor variable coded as 1 = cardiotoxicity and 0 =
+no cardiotoxicity. Two rows with missing data for cardiotox due to lack
+of strain data from echo.</p>
+<pre class="r"><code>serpina12 &lt;- dset_vars %&gt;% 
+  filter(!is.na(cardiotox)) %&gt;%
+  ggplot(mapping = aes(x = cardiotox, y = serpina12)) +
+    geom_violin() +
+    stat_compare_means(method = &quot;t.test&quot;, label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = &quot;mean&quot;,
+               geom = &quot;crossbar&quot;, 
+               width = 0.5,
+               colour = &quot;red&quot;) +
+    theme_bw()
+
+cpvl &lt;- dset_vars %&gt;% 
+  filter(!is.na(cardiotox)) %&gt;%
+  ggplot(mapping = aes(x = cardiotox, y = cpvl)) +
+    geom_violin() +
+    stat_compare_means(method = &quot;t.test&quot;, label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = &quot;mean&quot;,
+               geom = &quot;crossbar&quot;, 
+               width = 0.5,
+               colour = &quot;red&quot;) +
+    theme_bw()
+
+pigr &lt;- dset_vars %&gt;% 
+  filter(!is.na(cardiotox)) %&gt;%
+  ggplot(mapping = aes(x = cardiotox, y = pigr)) +
+    geom_violin() +
+    stat_compare_means(method = &quot;t.test&quot;, label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = &quot;mean&quot;,
+               geom = &quot;crossbar&quot;, 
+               width = 0.5,
+               colour = &quot;red&quot;) +
+    theme_bw()
+
+iqfc3 &lt;- dset_vars %&gt;% 
+  filter(!is.na(cardiotox)) %&gt;%
+  ggplot(mapping = aes(x = cardiotox, y = iqfc3)) +
+    geom_violin() +
+    stat_compare_means(method = &quot;t.test&quot;, label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = &quot;mean&quot;,
+               geom = &quot;crossbar&quot;, 
+               width = 0.5,
+               colour = &quot;red&quot;) +
+    theme_bw()
+
+sesq2 &lt;- dset_vars %&gt;% 
+  filter(!is.na(cardiotox)) %&gt;%
+  ggplot(mapping = aes(x = cardiotox, y = sesq2)) +
+    geom_violin() +
+    stat_compare_means(method = &quot;t.test&quot;, label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = &quot;mean&quot;,
+               geom = &quot;crossbar&quot;, 
+               width = 0.5,
+               colour = &quot;red&quot;) +
+    theme_bw()
+
+ggarrange(serpina12, cpvl, iqfc3, pigr, sesq2,
+                    labels = c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;),
+                    ncol = 3, nrow = 2)</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
+None of the pretreatment protein levels varied significantly between the
+cardiotox and no cardiotox categorial outcome variables.</p>
+<p>Delta LVEF Scatter plots</p>
+<pre class="r"><code>s12_scat &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_lvef)) %&gt;%
+  ggplot(mapping = aes(x = serpina12, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+cpvl_scat &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_lvef)) %&gt;%
+  ggplot(mapping = aes(x = cpvl, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+pigr_scat &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_lvef)) %&gt;%
+  ggplot(mapping = aes(x = pigr, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+iqfc3_scat &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_lvef)) %&gt;%
+  ggplot(mapping = aes(x = iqfc3, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+sesq2_scat &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_lvef)) %&gt;%
+  ggplot(mapping = aes(x = sesq2, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+ggarrange(s12_scat, cpvl_scat, iqfc3_scat, pigr_scat, sesq2_scat,
+                    labels = c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;),
+                    ncol = 3, nrow = 2)</code></pre>
+<pre><code>`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" />
+P-values were not computed for these relationships as the
+Bonferroni-corrected P-values from the initial high dimensional
+univariate correlation test should be used here. All demonstrated a
+linear trend, though the impact of outliers is a little concerning for
+several cases (does not mean it isn’t real, but greater numbers of
+observations should clear up if it is real or a erroneous
+observation).</p>
+<p>Delta GLS Scatter plots</p>
+<pre class="r"><code>s12_scat_g &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_gls)) %&gt;%
+  ggplot(mapping = aes(x = serpina12, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+cpvl_scat_g &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_gls)) %&gt;%
+  ggplot(mapping = aes(x = cpvl, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+pigr_scat_g &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_gls)) %&gt;%
+  ggplot(mapping = aes(x = pigr, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+iqfc3_scat_g &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_gls)) %&gt;%
+  ggplot(mapping = aes(x = iqfc3, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+sesq2_scat_g &lt;- dset_vars %&gt;%
+  filter(!is.na(delta_gls)) %&gt;%
+  ggplot(mapping = aes(x = sesq2, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+ggarrange(s12_scat_g, cpvl_scat_g, iqfc3_scat_g, pigr_scat_g, sesq2_scat_g,
+                    labels = c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;),
+                    ncol = 3, nrow = 2)</code></pre>
+<pre><code>`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;
+`geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/multivariate.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" />
+P-values were not computed for these relationships as the
+Bonferroni-corrected P-values from the initial high dimensional
+univariate correlation test should be used here. All demonstrated a
+linear trend, though the impact of outliers is a little concerning for
+several cases (does not mean it isn’t real, but greater numbers of
+observations should clear up if it is real or a erroneous
+observation).</p>
+</div>
+</div>
+<div id="multivariate-modeling" class="section level2">
+<h2>Multivariate modeling</h2>
+<p>When should covariates be added to a linear model? <a
+href="https://towardsdatascience.com/get-a-grip-when-to-add-covariates-in-a-linear-regression-f6a5a47930e5"
+class="uri">https://towardsdatascience.com/get-a-grip-when-to-add-covariates-in-a-linear-regression-f6a5a47930e5</a></p>
+<p>Ensure that all categorical variables are coded as factors (done
+above)</p>
+<p>Examine covariates</p>
+<pre class="r"><code># fit model with covariates only - do they impact the outcome variable?
+# ignore disease for now - too many categories
+mod1 &lt;- lm(formula = delta_lvef ~ age + sex + race_category + abn_gfr + abn_bmi, data = dset_vars)
+summary(mod1)</code></pre>
+<pre><code>
+Call:
+lm(formula = delta_lvef ~ age + sex + race_category + abn_gfr + 
+    abn_bmi, data = dset_vars)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.36757 -0.06809  0.02126  0.08252  0.16739 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)        -0.221276   0.123355  -1.794  0.08405 . 
+age                 0.001065   0.001628   0.654  0.51854   
+sexMale            -0.001449   0.045504  -0.032  0.97483   
+race_categorywhite  0.088897   0.048382   1.837  0.07718 . 
+abn_gfrnormal       0.041643   0.050788   0.820  0.41943   
+abn_bmiobese       -0.169647   0.052812  -3.212  0.00339 **
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.1264 on 27 degrees of freedom
+Multiple R-squared:  0.3545,    Adjusted R-squared:  0.2349 
+F-statistic: 2.965 on 5 and 27 DF,  p-value: 0.02927</code></pre>
+<pre class="r"><code># try model with numerical values for BMI and GFR
+mod2 &lt;- lm(formula = delta_lvef ~ age + sex + race_category + gfr + bmi, data = dset_vars)
+summary(mod2)</code></pre>
+<pre><code>
+Call:
+lm(formula = delta_lvef ~ age + sex + race_category + gfr + bmi, 
+    data = dset_vars)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.29232 -0.05098 -0.01378  0.07023  0.19754 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)        -0.346033   0.252278  -1.372 0.181469    
+age                 0.004191   0.002042   2.053 0.049908 *  
+sexMale             0.013002   0.042546   0.306 0.762258    
+race_categorywhite  0.103888   0.045599   2.278 0.030840 *  
+gfr                 0.003384   0.001604   2.109 0.044324 *  
+bmi                -0.015383   0.004015  -3.831 0.000691 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.1178 on 27 degrees of freedom
+Multiple R-squared:  0.4391,    Adjusted R-squared:  0.3352 
+F-statistic: 4.227 on 5 and 27 DF,  p-value: 0.005745</code></pre>
+<pre class="r"><code># in this model, age, race, GFR, and BMI all significantly impact LVEF
+
+# try model with numerical values for BMI only (given nonlinear relationship between GFR and risk of kidney injury)
+mod2 &lt;- lm(formula = delta_lvef ~ age + sex + race_category + abn_gfr + bmi, data = dset_vars)
+summary(mod2)</code></pre>
+<pre><code>
+Call:
+lm(formula = delta_lvef ~ age + sex + race_category + abn_gfr + 
+    bmi, data = dset_vars)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.37464 -0.07503  0.01553  0.05225  0.19246 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)         0.068087   0.146922   0.463  0.64677   
+age                 0.001622   0.001650   0.983  0.33424   
+sexMale             0.004608   0.045459   0.101  0.92001   
+race_categorywhite  0.090395   0.048073   1.880  0.07089 . 
+abn_gfrnormal       0.040472   0.050406   0.803  0.42903   
+bmi                -0.013777   0.004201  -3.279  0.00287 **
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.1257 on 27 degrees of freedom
+Multiple R-squared:  0.3619,    Adjusted R-squared:  0.2437 
+F-statistic: 3.062 on 5 and 27 DF,  p-value: 0.02569</code></pre>
+<pre class="r"><code># in this model, race and obesity significantly impact LVEF. Notably, the estimated coefficient is similar in all models for obesity, and the P-value is very similar -- stable across all three models. </code></pre>
+<p>Given the small size of the dataset and to minimize impact of
+numerical outliers, we will use factorized/cutoff values for obesity and
+kidney injury (GFR &lt; 90) in subsequent models.</p>
+<p>Interesting that obesity is most significant clinical variable.
+Obesity was previously identified as a clinical risk factor for
+anthracycline cardiotoxicity (along with HTN and DM2) <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8511483/"
+class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8511483/</a></p>
+<div id="lvef" class="section level4">
+<h4>LVEF</h4>
+<pre class="r"><code># quick check
+mod_serpina12 &lt;- lm(formula = delta_lvef ~ serpina12 + age + sex + race_category + abn_gfr + abn_bmi, data = dset_vars)
+summary(mod_serpina12)</code></pre>
+<pre><code>
+Call:
+lm(formula = delta_lvef ~ serpina12 + age + sex + race_category + 
+    abn_gfr + abn_bmi, data = dset_vars)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.21050 -0.08064  0.01089  0.09045  0.26367 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)         0.3304857  0.2795413   1.182  0.24781   
+serpina12          -0.0436419  0.0201284  -2.168  0.03948 * 
+age                 0.0006903  0.0015362   0.449  0.65692   
+sexMale            -0.0107113  0.0428867  -0.250  0.80474   
+race_categorywhite  0.0511572  0.0485963   1.053  0.30217   
+abn_gfrnormal       0.0485105  0.0477335   1.016  0.31886   
+abn_bmiobese       -0.1501638  0.0503349  -2.983  0.00613 **
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.1185 on 26 degrees of freedom
+Multiple R-squared:  0.4533,    Adjusted R-squared:  0.3272 
+F-statistic: 3.593 on 6 and 26 DF,  p-value: 0.009971</code></pre>
+<pre class="r"><code># serpina12 remains significant; BMI is biggest predictor of outcome
+
+# fit models for all 5 protein biomarkers
+# reformat data
+tidy_vars &lt;- dset_vars %&gt;% 
+  pivot_longer(cols = c(&quot;serpina12&quot;, &quot;cpvl&quot;, &quot;iqfc3&quot;, &quot;pigr&quot;, &quot;sesq2&quot;), 
+    names_to = &quot;biomarker&quot;, 
+    values_to = &quot;level&quot;, 
+    cols_vary = &quot;slowest&quot;) %&gt;%
+  select(biomarker, level, everything()) %&gt;%
+  print()</code></pre>
+<pre><code># A tibble: 165 × 16
+   biomarker level study_id   age sex    race      disease   gfr   bmi cardiotox
+   &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;     &lt;fct&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;    
+ 1 serpina12  11.0        5    24 Female White     Non-Ho…   124  19.9 0        
+ 2 serpina12  11.2        6    70 Male   African … Follic…    65  24   1        
+ 3 serpina12  16.5        8    44 Female African … T-Cell…    93  34.5 1        
+ 4 serpina12  11.5       14    49 Female White     Hodgki…   110  23.6 1        
+ 5 serpina12  11.5       23    57 Male   Asian     DLBCL     103  23.8 0        
+ 6 serpina12  11.6       24    61 Female White     DLBCL      73  19.2 0        
+ 7 serpina12  11.4       25    69 Female White     Hodgki…    94  30.2 1        
+ 8 serpina12  11.2       30    61 Female White     DLBCL     102  29.1 0        
+ 9 serpina12  11.8       32    29 Male   White     DLBCL     123  28.7 0        
+10 serpina12  11.0       34    27 Female White     Hodgki…   121  20.2 0        
+# ℹ 155 more rows
+# ℹ 6 more variables: delta_gls &lt;dbl&gt;, delta_lvef &lt;dbl&gt;, abn_gfr &lt;fct&gt;,
+#   abn_bmi &lt;fct&gt;, race_category &lt;fct&gt;, disease_category &lt;fct&gt;</code></pre>
+<pre class="r"><code>lvef_models &lt;- tidy_vars %&gt;%
+  nest(data = c(-biomarker)) %&gt;%
+  mutate(
+    fit = map(data, ~ lm(delta_lvef ~ level + 
+      age + 
+      sex +
+      race_category +
+      abn_gfr +
+      abn_bmi,
+      data = .x)),
+    tidied = map(fit, tidy)
+  ) %&gt;%
+  unnest(tidied) %&gt;%
+  select(-data, -fit)
+
+lvef_models %&gt;% print(n = 35)</code></pre>
+<pre><code># A tibble: 35 × 6
+   biomarker term                 estimate std.error statistic  p.value
+   &lt;chr&gt;     &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 serpina12 (Intercept)         0.330       0.280     1.18    0.248   
+ 2 serpina12 level              -0.0436      0.0201   -2.17    0.0395  
+ 3 serpina12 age                 0.000690    0.00154   0.449   0.657   
+ 4 serpina12 sexMale            -0.0107      0.0429   -0.250   0.805   
+ 5 serpina12 race_categorywhite  0.0512      0.0486    1.05    0.302   
+ 6 serpina12 abn_gfrnormal       0.0485      0.0477    1.02    0.319   
+ 7 serpina12 abn_bmiobese       -0.150       0.0503   -2.98    0.00613 
+ 8 cpvl      (Intercept)         0.331       0.212     1.56    0.131   
+ 9 cpvl      level              -0.0521      0.0172   -3.02    0.00559 
+10 cpvl      age                 0.00114     0.00143   0.797   0.433   
+11 cpvl      sexMale            -0.00783     0.0400   -0.196   0.846   
+12 cpvl      race_categorywhite  0.0594      0.0435    1.36    0.184   
+13 cpvl      abn_gfrnormal       0.0525      0.0447    1.18    0.250   
+14 cpvl      abn_bmiobese       -0.140       0.0473   -2.96    0.00646 
+15 iqfc3     (Intercept)         3.05        0.819     3.72    0.000971
+16 iqfc3     level              -0.312       0.0776   -4.02    0.000447
+17 iqfc3     age                 0.000795    0.00130   0.609   0.548   
+18 iqfc3     sexMale            -0.0452      0.0380   -1.19    0.245   
+19 iqfc3     race_categorywhite  0.0282      0.0416    0.679   0.503   
+20 iqfc3     abn_gfrnormal       0.0626      0.0410    1.53    0.139   
+21 iqfc3     abn_bmiobese       -0.132       0.0433   -3.06    0.00512 
+22 pigr      (Intercept)         0.680       0.355     1.92    0.0663  
+23 pigr      level              -0.0807      0.0301   -2.68    0.0127  
+24 pigr      age                 0.00102     0.00147   0.697   0.492   
+25 pigr      sexMale            -0.0000527   0.0411   -0.00128 0.999   
+26 pigr      race_categorywhite  0.0988      0.0438    2.25    0.0328  
+27 pigr      abn_gfrnormal       0.0615      0.0464    1.32    0.197   
+28 pigr      abn_bmiobese       -0.174       0.0477   -3.64    0.00118 
+29 sesq2     (Intercept)         2.17        0.707     3.07    0.00499 
+30 sesq2     level              -0.253       0.0739   -3.42    0.00209 
+31 sesq2     age                 0.000568    0.00139   0.410   0.685   
+32 sesq2     sexMale            -0.0356      0.0398   -0.895   0.379   
+33 sesq2     race_categorywhite  0.0438      0.0430    1.02    0.318   
+34 sesq2     abn_gfrnormal       0.0672      0.0436    1.54    0.135   
+35 sesq2     abn_bmiobese       -0.0935      0.0499   -1.87    0.0725  </code></pre>
+<pre class="r"><code>gls_models &lt;- tidy_vars %&gt;%
+  nest(data = c(-biomarker)) %&gt;%
+  mutate(
+    fit = map(data, ~ lm(delta_gls ~ level + 
+      age + 
+      sex +
+      race_category +
+      abn_gfr +
+      abn_bmi,
+      data = .x)),
+    tidied = map(fit, tidy)
+  ) %&gt;%
+  unnest(tidied) %&gt;%
+  select(-data, -fit)
+
+gls_models %&gt;% print(n = 35)</code></pre>
+<pre><code># A tibble: 35 × 6
+   biomarker term               estimate std.error statistic p.value
+   &lt;chr&gt;     &lt;chr&gt;                 &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+ 1 serpina12 (Intercept)         0.809     0.501       1.61  0.120  
+ 2 serpina12 level              -0.0950    0.0368     -2.58  0.0168 
+ 3 serpina12 age                 0.00119   0.00217     0.547 0.590  
+ 4 serpina12 sexMale            -0.0201    0.0627     -0.320 0.751  
+ 5 serpina12 race_categorywhite  0.124     0.0708      1.75  0.0926 
+ 6 serpina12 abn_gfrnormal       0.0501    0.0705      0.711 0.484  
+ 7 serpina12 abn_bmiobese       -0.0455    0.0797     -0.572 0.573  
+ 8 cpvl      (Intercept)         0.108     0.332       0.324 0.749  
+ 9 cpvl      level              -0.0494    0.0270     -1.83  0.0800 
+10 cpvl      age                 0.00257   0.00224     1.15  0.263  
+11 cpvl      sexMale             0.0209    0.0640      0.327 0.747  
+12 cpvl      race_categorywhite  0.146     0.0739      1.98  0.0598 
+13 cpvl      abn_gfrnormal       0.0824    0.0745      1.11  0.280  
+14 cpvl      abn_bmiobese       -0.100     0.0788     -1.27  0.216  
+15 iqfc3     (Intercept)         2.58      1.39        1.85  0.0771 
+16 iqfc3     level              -0.286     0.132      -2.16  0.0410 
+17 iqfc3     age                 0.00229   0.00219     1.05  0.306  
+18 iqfc3     sexMale            -0.0165    0.0652     -0.252 0.803  
+19 iqfc3     race_categorywhite  0.114     0.0761      1.50  0.148  
+20 iqfc3     abn_gfrnormal       0.0904    0.0730      1.24  0.228  
+21 iqfc3     abn_bmiobese       -0.0858    0.0780     -1.10  0.283  
+22 pigr      (Intercept)         0.870     0.554       1.57  0.130  
+23 pigr      level              -0.114     0.0470     -2.43  0.0235 
+24 pigr      age                 0.00229   0.00214     1.07  0.297  
+25 pigr      sexMale             0.0172    0.0612      0.281 0.781  
+26 pigr      race_categorywhite  0.196     0.0687      2.86  0.00896
+27 pigr      abn_gfrnormal       0.0822    0.0711      1.16  0.259  
+28 pigr      abn_bmiobese       -0.110     0.0742     -1.48  0.151  
+29 sesq2     (Intercept)         2.73      1.07        2.56  0.0176 
+30 sesq2     level              -0.332     0.111      -2.98  0.00673
+31 sesq2     age                 0.00188   0.00205     0.919 0.368  
+32 sesq2     sexMale            -0.0204    0.0601     -0.340 0.737  
+33 sesq2     race_categorywhite  0.109     0.0693      1.57  0.130  
+34 sesq2     abn_gfrnormal       0.0935    0.0679      1.38  0.182  
+35 sesq2     abn_bmiobese       -0.0104    0.0807     -0.129 0.898  </code></pre>
+</div>
+</div>
+<div id="auc" class="section level2">
+<h2>AUC</h2>
+<p>Protein biomarker predictive power versus obesity Too few samples
+right now for train/test splitting</p>
+</div>
+<div id="stratify-on-obesity" class="section level2">
+<h2>Stratify on obesity</h2>
+<p><a href="https://www.tidymodels.org/learn/statistics/tidy-analysis/"
+class="uri">https://www.tidymodels.org/learn/statistics/tidy-analysis/</a></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: x86_64-apple-darwin20 (64-bit)
+Running under: macOS Big Sur 11.7.8
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/New_York
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] broom_1.0.5     ggpubr_0.6.0    lubridate_1.9.3 forcats_1.0.0  
+ [5] stringr_1.5.0   dplyr_1.1.3     purrr_1.0.2     readr_2.1.4    
+ [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.4   tidyverse_2.0.0
+[13] workflowr_1.7.1
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.4      xfun_0.40         bslib_0.5.1       processx_3.8.2   
+ [5] rstatix_0.7.2     lattice_0.21-8    callr_3.7.3       tzdb_0.4.0       
+ [9] vctrs_0.6.3       tools_4.3.1       ps_1.7.5          generics_0.1.3   
+[13] parallel_4.3.1    fansi_1.0.5       pkgconfig_2.0.3   Matrix_1.6-1.1   
+[17] lifecycle_1.0.3   farver_2.1.1      compiler_4.3.1    git2r_0.32.0     
+[21] munsell_0.5.0     getPass_0.2-2     carData_3.0-5     httpuv_1.6.11    
+[25] htmltools_0.5.6.1 sass_0.4.7        yaml_2.3.7        crayon_1.5.2     
+[29] later_1.3.1       pillar_1.9.0      car_3.1-2         jquerylib_0.1.4  
+[33] whisker_0.4.1     cachem_1.0.8      abind_1.4-5       nlme_3.1-162     
+[37] tidyselect_1.2.0  digest_0.6.33     stringi_1.7.12    splines_4.3.1    
+[41] labeling_0.4.3    cowplot_1.1.1     rprojroot_2.0.3   fastmap_1.1.1    
+[45] grid_4.3.1        colorspace_2.1-0  cli_3.6.1         magrittr_2.0.3   
+[49] utf8_1.2.3        withr_2.5.1       scales_1.2.1      promises_1.2.1   
+[53] backports_1.4.1   bit64_4.0.5       timechange_0.2.0  rmarkdown_2.25   
+[57] httr_1.4.7        bit_4.0.5         ggsignif_0.6.4    hms_1.1.3        
+[61] evaluate_0.22     knitr_1.44        mgcv_1.8-42       rlang_1.1.1      
+[65] Rcpp_1.0.11       glue_1.6.2        rstudioapi_0.15.0 vroom_1.6.4      
+[69] jsonlite_1.8.7    R6_2.5.1          fs_1.6.3         </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
