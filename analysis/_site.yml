@@ -1,7 +1,7 @@
-name: "anthracycline"
+name: anthracycline
 output_dir: ../docs
 navbar:
-  title: "anthracycline"
+  title: anthracycline
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/mleukam/anthracycline
 output:
   workflowr::wflow_html:
     toc: yes
