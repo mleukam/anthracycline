@@ -7,9 +7,65 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Introduction
-
+## Setup
 ```{r}
+library("tidyverse")
+library("ggpubr")
+library("broom")
+library("purrr")
+library("readxl")
+```
 
+
+```
+# read in clinical data
+clin_dat <- read_excel("data/34 Patients.xlsx", 
+    n_max = 34)
+View(clin_dat)
+
+# read in protein data
+prots <- read_excel("data/34 Patients.xlsx", sheet = "New Correlations")
+
+prots_filt <- prots %>% 
+  select(-SeqId, -SomaId, -TargetFullName) %>%
+  print()
+
+baseline_prots <- prots %>% 
+  pivot_wider(names_from = Target,  values_from = c(
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5"                             
+[10] "B6"                             
+[11] "B7"                             
+[12] "B8"                             
+[13] "B9"                             
+[14] "B10"                            
+[15] "B11"                            
+[16] "B12"                            
+[17] "B13"                            
+[18] "B14"                            
+[19] "B15"                            
+[20] "B16"                            
+[21] "B17"                            
+[22] "B18"                            
+[23] "B19"                            
+[24] "B20"                            
+[25] "B21"                            
+[26] "B22"                            
+[27] "B23"                            
+[28] "B24"                            
+[29] "B25"                            
+[30] "B26"                            
+[31] "B27"                            
+[32] "B28"                            
+[33] "B32"                            
+[34] "B33"                            
+[35] "B35"                            
+[36] "B36"                            
+[37] "B37"                            
+[38] "B38") %>%
+  print()
 ```
 
