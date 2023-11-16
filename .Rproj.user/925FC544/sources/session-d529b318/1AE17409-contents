@@ -1,0 +1,397 @@
+---
+title: "Multivariate_Analysis"
+author: "Michael Leukam"
+date: "2023-10-12"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Setup
+```{r}
+library("tidyverse")
+library("ggpubr")
+library("broom")
+library("purrr")
+```
+
+Load data
+```{r}
+dset <- read_csv("data/Statistical Analysis.csv")
+```
+
+## Data Cleaning
+
+Dataset includes 5 proteins that survived Bonferroni correction. Outcome variables are relative delta LVEF and relative delta GLS, as well as "developed cardiotoxicity". Predictor variables are the baseline values of the 5 proteins. 
+
+* Renal toxicity: use GFR as continuous variable (maybe try cutoff?)
+* Obesity: use BMI as continuous variable (maybe try cutoff?)
+* Sex: factor
+* Age: continuous variable (integer)
+* Race: factor
+* Diagnosis: factor, DLBCL vs other or cHL vs DLBCL?
+
+```{r}
+# remove PHI
+dset %>% colnames() %>% print()
+dset_clean <- dset %>% 
+  select(-MRN) %>%
+  select(-`Treatment Start Date`)
+dset_clean %>% colnames() %>% print()
+
+# make table of response and predictor variables
+# assign correct data types (factors)
+dset_vars <- dset_clean %>%
+  select("study_id" = `Patient ID`,
+         "age" = "Age",
+         "sex" = "Gender",
+         "race" = "Race",
+         "disease" = "Diagnosis",
+         "gfr" = `eGFR (CKD-EPI) (mL/min/1.73m2)`,
+         "bmi" = "BMI",
+         "cardiotox" = `Developed Cardiotoxicity`,
+         "delta_gls" = `Relative Delta GLS`,
+         "delta_lvef" = `Relative Delta LVEF`,
+         "serpina12" = `SERPINA12 Baseline`,
+         "cpvl" = `CPVL Baseline`,
+         "pigr" = `PIGR Baseline`,
+         "iqfc3" = `IQFC3 Baseline`,
+         "sesq2" = `SESQ2 Baseline`
+  ) %>%
+  # fix missing data notation
+  mutate(cardiotox = replace(cardiotox, cardiotox == "N/A", NA)) %>%
+  # convert categorical variables to factors
+  mutate_at(c("sex", "cardiotox", "race", "disease"), as.factor) %>%
+  # create cutoff categorial variables
+  mutate(abn_gfr = ifelse(gfr < 90, "abnormal", "normal")) %>%
+  mutate(abn_bmi = ifelse(bmi > 29.9, "obese", "not_obese")) %>%
+  # fix problematic categories (too small groups)
+  mutate(race_category = ifelse(race == "White", "white", "other")) %>%
+  mutate(disease_category = ifelse(disease == "DLBCL", "DLBCL", "other")) %>%
+  mutate_at(c("race_category", "disease_category", "abn_gfr", "abn_bmi"), as.factor)
+
+# potential problematic variable -- race
+# most are white, some categories only have 1 person
+summary(dset_vars$race)
+# could consider white vs all else, or exclude
+summary(dset_vars$race_category)
+
+# potential problematic variable -- disease
+summary(dset_vars$disease)
+# probably just exclude for now until there are enough data points for meaningful groupings
+summary(dset_vars$disease_category)
+
+glimpse(dset_vars)
+```
+
+## Exploratory Data Analysis
+
+#### Visualize distributions
+
+look for significant ouliers or non parametric distribution
+```{r}
+# age
+dset_vars %>%
+  ggplot() +
+    geom_bar(mapping = aes(x = age))
+# roughly parametric, long left tail
+
+# sex
+dset_vars %>%
+  ggplot() +
+    geom_bar(mapping = aes(x = sex))
+# roughly even
+
+# GFR
+dset_vars %>%
+  ggplot() +
+    geom_bar(mapping = aes(x = gfr))
+# roughly parametric
+
+# obesity
+dset_vars %>%
+  ggplot() +
+    geom_bar(mapping = aes(x = bmi))
+# roughly parametric, long right tail, two outliers on right
+
+# disease
+dset_vars %>%
+  ggplot() +
+    geom_bar(mapping = aes(x = disease))
+# most are DLBCL, could do DLBCL vs all else or Hodgkin vs non-Hodgkin
+
+# protein 1
+dset_vars %>%
+  ggplot() +
+    geom_histogram(mapping = aes(x = serpina12))
+# two outliers to the right
+
+# protein 2
+dset_vars %>%
+  ggplot() +
+    geom_histogram(mapping = aes(x = cpvl))
+# two outliers to the right, long tail to right
+
+# protein 3
+dset_vars %>%
+  ggplot() +
+    geom_histogram(mapping = aes(x = pigr))
+# parametric distribution
+
+# protein 4
+dset_vars %>%
+  ggplot() +
+    geom_histogram(mapping = aes(x = iqfc3))
+# outlier to the right
+
+# protein 5
+dset_vars %>%
+  ggplot() +
+    geom_histogram(mapping = aes(x = sesq2))
+# long tail to right
+```
+
+#### Plot outcome variables
+
+Cardiotoxicity - factor variable coded as 1 = cardiotoxicity and 0 = no cardiotoxicity. Two rows with missing data for cardiotox due to lack of strain data from echo.
+
+```{r}
+serpina12 <- dset_vars %>% 
+  filter(!is.na(cardiotox)) %>%
+  ggplot(mapping = aes(x = cardiotox, y = serpina12)) +
+    geom_violin() +
+    stat_compare_means(method = "t.test", label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.5,
+               colour = "red") +
+    theme_bw()
+
+cpvl <- dset_vars %>% 
+  filter(!is.na(cardiotox)) %>%
+  ggplot(mapping = aes(x = cardiotox, y = cpvl)) +
+    geom_violin() +
+    stat_compare_means(method = "t.test", label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.5,
+               colour = "red") +
+    theme_bw()
+
+pigr <- dset_vars %>% 
+  filter(!is.na(cardiotox)) %>%
+  ggplot(mapping = aes(x = cardiotox, y = pigr)) +
+    geom_violin() +
+    stat_compare_means(method = "t.test", label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.5,
+               colour = "red") +
+    theme_bw()
+
+iqfc3 <- dset_vars %>% 
+  filter(!is.na(cardiotox)) %>%
+  ggplot(mapping = aes(x = cardiotox, y = iqfc3)) +
+    geom_violin() +
+    stat_compare_means(method = "t.test", label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.5,
+               colour = "red") +
+    theme_bw()
+
+sesq2 <- dset_vars %>% 
+  filter(!is.na(cardiotox)) %>%
+  ggplot(mapping = aes(x = cardiotox, y = sesq2)) +
+    geom_violin() +
+    stat_compare_means(method = "t.test", label.x = 1, label.y = 5) +
+    expand_limits(x = 0, y = 0) +
+    stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.5,
+               colour = "red") +
+    theme_bw()
+
+ggarrange(serpina12, cpvl, iqfc3, pigr, sesq2,
+                    labels = c("A", "B", "C", "D", "E"),
+                    ncol = 3, nrow = 2)
+```
+None of the pretreatment protein levels varied significantly between the cardiotox and no cardiotox categorial outcome variables.
+
+Delta LVEF
+Scatter plots
+```{r}
+s12_scat <- dset_vars %>%
+  filter(!is.na(delta_lvef)) %>%
+  ggplot(mapping = aes(x = serpina12, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+cpvl_scat <- dset_vars %>%
+  filter(!is.na(delta_lvef)) %>%
+  ggplot(mapping = aes(x = cpvl, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+pigr_scat <- dset_vars %>%
+  filter(!is.na(delta_lvef)) %>%
+  ggplot(mapping = aes(x = pigr, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+iqfc3_scat <- dset_vars %>%
+  filter(!is.na(delta_lvef)) %>%
+  ggplot(mapping = aes(x = iqfc3, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+sesq2_scat <- dset_vars %>%
+  filter(!is.na(delta_lvef)) %>%
+  ggplot(mapping = aes(x = sesq2, y = delta_lvef)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+ggarrange(s12_scat, cpvl_scat, iqfc3_scat, pigr_scat, sesq2_scat,
+                    labels = c("A", "B", "C", "D", "E"),
+                    ncol = 3, nrow = 2)
+  
+
+```
+P-values were not computed for these relationships as the Bonferroni-corrected P-values from the initial high dimensional univariate correlation test should be used here. All demonstrated a linear trend, though the impact of outliers is a little concerning for several cases (does not mean it isn't real, but greater numbers of observations should clear up if it is real or a erroneous observation).
+
+Delta GLS
+Scatter plots
+```{r}
+s12_scat_g <- dset_vars %>%
+  filter(!is.na(delta_gls)) %>%
+  ggplot(mapping = aes(x = serpina12, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+cpvl_scat_g <- dset_vars %>%
+  filter(!is.na(delta_gls)) %>%
+  ggplot(mapping = aes(x = cpvl, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+pigr_scat_g <- dset_vars %>%
+  filter(!is.na(delta_gls)) %>%
+  ggplot(mapping = aes(x = pigr, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+iqfc3_scat_g <- dset_vars %>%
+  filter(!is.na(delta_gls)) %>%
+  ggplot(mapping = aes(x = iqfc3, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+sesq2_scat_g <- dset_vars %>%
+  filter(!is.na(delta_gls)) %>%
+  ggplot(mapping = aes(x = sesq2, y = delta_gls)) +
+    geom_point() +
+    geom_smooth(method = lm)
+
+ggarrange(s12_scat_g, cpvl_scat_g, iqfc3_scat_g, pigr_scat_g, sesq2_scat_g,
+                    labels = c("A", "B", "C", "D", "E"),
+                    ncol = 3, nrow = 2)
+  
+
+```
+P-values were not computed for these relationships as the Bonferroni-corrected P-values from the initial high dimensional univariate correlation test should be used here. All demonstrated a linear trend, though the impact of outliers is a little concerning for several cases (does not mean it isn't real, but greater numbers of observations should clear up if it is real or a erroneous observation).
+
+## Multivariate modeling
+
+When should covariates be added to a linear model?
+https://towardsdatascience.com/get-a-grip-when-to-add-covariates-in-a-linear-regression-f6a5a47930e5
+
+Ensure that all categorical variables are coded as factors (done above)
+
+Examine covariates
+```{r}
+# fit model with covariates only - do they impact the outcome variable?
+# ignore disease for now - too many categories
+mod1 <- lm(formula = delta_lvef ~ age + sex + race_category + abn_gfr + abn_bmi, data = dset_vars)
+summary(mod1)
+
+# try model with numerical values for BMI and GFR
+mod2 <- lm(formula = delta_lvef ~ age + sex + race_category + gfr + bmi, data = dset_vars)
+summary(mod2)
+# in this model, age, race, GFR, and BMI all significantly impact LVEF
+
+# try model with numerical values for BMI only (given nonlinear relationship between GFR and risk of kidney injury)
+mod2 <- lm(formula = delta_lvef ~ age + sex + race_category + abn_gfr + bmi, data = dset_vars)
+summary(mod2)
+# in this model, race and obesity significantly impact LVEF. Notably, the estimated coefficient is similar in all models for obesity, and the P-value is very similar -- stable across all three models. 
+```
+
+Given the small size of the dataset and to minimize impact of numerical outliers, we will use factorized/cutoff values for obesity and kidney injury (GFR < 90) in subsequent models.
+
+Interesting that obesity is most significant clinical variable. Obesity was previously identified as a clinical risk factor for anthracycline cardiotoxicity (along with HTN and DM2) https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8511483/
+
+#### LVEF
+```{r}
+# quick check
+mod_serpina12 <- lm(formula = delta_lvef ~ serpina12 + age + sex + race_category + abn_gfr + abn_bmi, data = dset_vars)
+summary(mod_serpina12)
+# serpina12 remains significant; BMI is biggest predictor of outcome
+
+# fit models for all 5 protein biomarkers
+# reformat data
+tidy_vars <- dset_vars %>% 
+  pivot_longer(cols = c("serpina12", "cpvl", "iqfc3", "pigr", "sesq2"), 
+    names_to = "biomarker", 
+    values_to = "level", 
+    cols_vary = "slowest") %>%
+  select(biomarker, level, everything()) %>%
+  print()
+
+lvef_models <- tidy_vars %>%
+  nest(data = c(-biomarker)) %>%
+  mutate(
+    fit = map(data, ~ lm(delta_lvef ~ level + 
+      age + 
+      sex +
+      race_category +
+      abn_gfr +
+      abn_bmi,
+      data = .x)),
+    tidied = map(fit, tidy)
+  ) %>%
+  unnest(tidied) %>%
+  select(-data, -fit)
+
+lvef_models %>% print(n = 35)
+
+gls_models <- tidy_vars %>%
+  nest(data = c(-biomarker)) %>%
+  mutate(
+    fit = map(data, ~ lm(delta_gls ~ level + 
+      age + 
+      sex +
+      race_category +
+      abn_gfr +
+      abn_bmi,
+      data = .x)),
+    tidied = map(fit, tidy)
+  ) %>%
+  unnest(tidied) %>%
+  select(-data, -fit)
+
+gls_models %>% print(n = 35)
+
+```
+
+
+## AUC
+Protein biomarker predictive power versus obesity
+Too few samples right now for train/test splitting
+
+## Stratify on obesity
+https://www.tidymodels.org/learn/statistics/tidy-analysis
+
+Too few cases right now for stratification 

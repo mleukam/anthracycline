@@ -1,0 +1,70 @@
+---
+title: "cancer_vars"
+author: "Michael Leukam"
+date: "2023-11-15"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Setup
+```{r}
+library("tidyverse")
+library("ggpubr")
+library("broom")
+library("purrr")
+library("readxl")
+```
+
+
+```{r}
+# read in clinical data
+clin_dat <- read_excel("data/34 Patients.xlsx", n_max = 34)
+View(clin_dat)
+
+# read in protein data
+prots <- read_excel("data/34 Patients.xlsx", sheet = "New Correlations") %>%
+  # remove extra metadata 
+
+prots_filt <- prots %>% 
+  select(-SeqId, -SomaId, -TargetFullName) %>%
+  print()
+
+baseline_prots <- prots %>% 
+  pivot_wider(names_from = Target,  values_from = c(
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6", "B7"    
+"B8"                             
+"B9"                             
+"B10"                            
+"B11"                            
+ "B12"                            
+[17] "B13"                            
+[18] "B14"                            
+[19] "B15"                            
+[20] "B16"                            
+[21] "B17"                            
+[22] "B18"                            
+[23] "B19"                            
+ "B20"                            
+ "B21"                            
+ "B22"                            
+ "B23"                            
+"B24"                            
+ "B25"                            
+"B26"                            
+ "B27"                            
+ "B28"                            
+ "B32"                            
+"B33"                            
+ "B35"                            
+"B36"                            
+"B37"                            
+"B38") %>%
+  print()
+```
+

@@ -1,0 +1,20 @@
+---
+title: "Home"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+Welcome to the lab notebook for the shared research project examining protein biomarkers for anthracycline toxicity and cancer outcomes.
+
+## Cardiac outcomes
+
+[Multivariate analysis for abstract](multivariate.html)
+
+## Oncologic outcomes
+
+[Clinical cancer outcome correlations](cancer_vars.html)
+
